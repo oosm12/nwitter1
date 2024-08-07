@@ -12,20 +12,23 @@ const Home = ({ userObj }) => {
       collection(dbService, "nweets"),
       orderBy("createdAt", "desc")
     );
+    
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const nweetArray = snapshot.docs.map((doc) => ({
+      const newArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setNweets(nweetArray);
+      setNweets(newArray);
     });
+
+    // Clean up subscription on unmount
     return () => unsubscribe();
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <NweetFactory userObj={userObj} />
-      <div>
+      <div style={{ marginTop: 30 }}>
         {nweets.map((nweet) => (
           <Nweet
             key={nweet.id}
